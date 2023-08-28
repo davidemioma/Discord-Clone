@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+//npm i -D prisma
+//npx prisma init
+//npx prisma generate - Do this after creating a new model
+//npx prisma db push - to push to your database.
+//npx prisma migrate reset - to reset your databse.
+//npx prisma studio - to view your data
+
+enum Role {
+  ADMIN
+  MODERATOR
+  GUEST
+}
+
+enum ChannelType {
+  TEXT
+  AUDIO
+  VIDEO
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Profile {
+  id String @id @default(uuid())
+  clerkId String @unique
+  name String
+  email String @db.Text
+  imgUrl String @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  servers Server[]
+  members Member[]
+  channels Channel[]
+}
+
+model Server {
+  id String @id @default(uuid())
+  profileId String
+  name String
+  imgUrl String @db.Text
+  inviteCode String @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  members Member[]
+  channels Channel[]
+
+  @@index([profileId])
+}
+
+model Member {
+  id String @id @default(uuid())
+  profileId String
+  serverId String
+  role Role @default(GUEST)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@index([serverId])
+}
+
+model Channel {
+  id String @id @default(uuid())
+  name String
+  profileId String
+  serverId String
+  type ChannelType @default(TEXT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@index([serverId])
+}

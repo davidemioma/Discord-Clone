@@ -1,12 +1,15 @@
-import { UserButton } from "@clerk/nextjs";
-import { ModeToggle } from "@/components/mode-toggle";
+import { redirect } from "next/navigation";
+import { getFirstServer } from "@/actions/getFirstServer";
+import { getCurrentUserProfile } from "@/actions/getCurrentUserProfile";
 
-export default function Home() {
-  return (
-    <div className="">
-      <UserButton afterSignOutUrl="/" />
+export default async function SetupPage() {
+  const profile = await getCurrentUserProfile();
 
-      <ModeToggle />
-    </div>
-  );
+  const server = await getFirstServer(profile.id);
+
+  if (server) {
+    redirect(`/servers/${server.id}`);
+  }
+
+  return <div className=""></div>;
 }
