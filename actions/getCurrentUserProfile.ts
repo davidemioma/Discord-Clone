@@ -1,3 +1,5 @@
+"use server";
+
 import prismadb from "@/lib/prismadb";
 import { currentUser, redirectToSignIn } from "@clerk/nextjs";
 

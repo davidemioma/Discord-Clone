@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import FileUpload from "../FileUpload";
+import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { createServer } from "@/actions/createServer";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { serverData, serverSchema } from "@/lib/validators/server";
 import {
@@ -40,7 +42,24 @@ const InitialModal = () => {
 
   const [isMounted, setIsMounted] = useState(false);
 
-  const onSubmit = async (values: serverData) => {};
+  const onSubmit = async (values: serverData) => {
+    try {
+      await createServer({
+        name: values.name,
+        imgUrl: values.imageUrl,
+      });
+
+      toast.success("Server Created.");
+
+      form.reset();
+
+      router.refresh();
+
+      window.location.reload();
+    } catch (err) {
+      toast.error("Something went wrong!");
+    }
+  };
 
   useEffect(() => {
     setIsMounted(true);
