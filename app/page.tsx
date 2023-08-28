@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getFirstServer } from "@/actions/getFirstServer";
+import InitialModal from "@/components/modals/InitialModal";
 import { getCurrentUserProfile } from "@/actions/getCurrentUserProfile";
 
 export default async function SetupPage() {
@@ -11,5 +12,5 @@ export default async function SetupPage() {
     redirect(`/servers/${server.id}`);
   }
 
-  return <div className=""></div>;
+  return <InitialModal />;
 }
