@@ -5,8 +5,10 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { toast } from "react-hot-toast";
+import { useOrigin } from "@/hooks/use-origin";
 import { Check, Copy, RefreshCw } from "lucide-react";
 import useInviteModal from "@/hooks/use-invite-modal";
+import { generateInviteLink } from "@/actions/generateInviteLink";
 import {
   Dialog,
   DialogContent,
@@ -15,11 +17,41 @@ import {
 } from "@/components/ui/dialog";
 
 const InviteModal = () => {
+  const origin = useOrigin();
+
   const inviteModal = useInviteModal();
 
   const [copied, setCopied] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const inviteUrl = `${origin}/invite/${inviteModal.data.server?.inviteCode}`;
+
+  const onCopy = () => {
+    navigator.clipboard.writeText(inviteUrl);
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+  };
+
+  const generateNewLink = async () => {
+    setIsLoading(true);
+
+    try {
+      const server = await generateInviteLink({
+        serverId: inviteModal.data.server?.id!,
+      });
+
+      inviteModal.onOpen({ server });
+    } catch (err) {
+      toast.error("Could not generate new link. Try again");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Dialog open={inviteModal.isOpen} onOpenChange={inviteModal.onClose}>
@@ -38,11 +70,11 @@ const InviteModal = () => {
           <div className="flex items-center gap-2 mt-2">
             <Input
               className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-              value={"Invite-Link"}
+              value={inviteUrl}
               disabled={isLoading}
             />
 
-            <Button onClick={() => {}} size="icon" disabled={isLoading}>
+            <Button onClick={onCopy} size="icon" disabled={isLoading}>
               {copied ? (
                 <Check className="w-4 h-4" />
               ) : (
@@ -55,7 +87,7 @@ const InviteModal = () => {
             className="text-xs text-zinc-500 mt-4"
             size="sm"
             variant="link"
-            onClick={() => {}}
+            onClick={generateNewLink}
             disabled={isLoading}
           >
             Generate a new link

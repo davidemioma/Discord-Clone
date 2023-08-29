@@ -48,7 +48,7 @@ model Server {
   profileId String
   name String
   imgUrl String @db.Text
-  inviteCode String @db.Text
+  inviteCode String @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

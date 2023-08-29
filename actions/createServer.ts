@@ -53,6 +53,6 @@ export const createServer = async ({ name, imgUrl }: Props) => {
       },
     });
   } catch (err: any) {
-    throw new Error(`Failed to add member: ${err.message}`);
+    throw new Error(`Failed to create server: ${err.message}`);
   }
 };

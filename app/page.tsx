@@ -6,7 +6,7 @@ import { getCurrentUserProfile } from "@/actions/getCurrentUserProfile";
 export default async function SetupPage() {
   const profile = await getCurrentUserProfile();
 
-  const server = await getFirstServer(profile.id);
+  const server = await getFirstServer(profile?.id);
 
   if (server) {
     redirect(`/servers/${server.id}`);

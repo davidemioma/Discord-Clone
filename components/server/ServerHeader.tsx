@@ -4,6 +4,7 @@ import React from "react";
 import { ServerProps } from "@/types";
 import { Role } from "@prisma/client";
 import useInviteModal from "@/hooks/use-invite-modal";
+import useEditServerModal from "@/hooks/use-edit-server-modal";
 import {
   ChevronDown,
   LogOut,
@@ -33,6 +34,8 @@ const ServerHeader = ({ server, role }: Props) => {
 
   const inviteModal = useInviteModal();
 
+  const editServerModal = useEditServerModal();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none" asChild>
@@ -57,7 +60,7 @@ const ServerHeader = ({ server, role }: Props) => {
         {isAdmin && (
           <DropdownMenuItem
             className="px-3 py-2 text-sm cursor-pointer"
-            onClick={() => {}}
+            onClick={() => editServerModal.onOpen({ server })}
           >
             Server Settings
             <Settings className="h-4 w-4 ml-auto" />
