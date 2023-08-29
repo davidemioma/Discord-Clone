@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import ModalProvider from "@/components/providers/modal-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import ToasterProvider from "@/components/providers/toaster-provider";
 
@@ -30,6 +31,8 @@ export default function RootLayout({
             enableSystem
             storageKey="discord-team"
           >
+            <ModalProvider />
+
             {children}
           </ThemeProvider>
         </body>
