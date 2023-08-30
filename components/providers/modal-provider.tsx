@@ -4,7 +4,9 @@ import React, { useEffect, useState } from "react";
 import InviteModal from "../modals/InviteModal";
 import MembersModal from "../modals/MembersModal";
 import EditServerModal from "../modals/EditServerModal";
+import LeaveServerModal from "../modals/LeaveServerModal";
 import CreateServerModal from "../modals/CreateServerModal";
+import DeleteServerModal from "../modals/DeleteServerModal";
 import CreateChannelModal from "../modals/CreateChannelModal";
 
 const ModalProvider = () => {
@@ -27,6 +29,10 @@ const ModalProvider = () => {
       <MembersModal />
 
       <CreateChannelModal />
+
+      <LeaveServerModal />
+
+      <DeleteServerModal />
     </>
   );
 };

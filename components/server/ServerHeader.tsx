@@ -6,6 +6,8 @@ import { Role } from "@prisma/client";
 import useInviteModal from "@/hooks/use-invite-modal";
 import useMembersModal from "@/hooks/use-members-modal";
 import useEditServerModal from "@/hooks/use-edit-server-modal";
+import useLeaveServerModal from "@/hooks/use-leave-server-modal";
+import useDeleteServerModal from "@/hooks/use-delete-server-modal";
 import useCreateChannelModal from "@/hooks/use-create-channel-modal";
 import {
   ChevronDown,
@@ -39,6 +41,10 @@ const ServerHeader = ({ server, role }: Props) => {
   const membersModal = useMembersModal();
 
   const editServerModal = useEditServerModal();
+
+  const leaveServerModal = useLeaveServerModal();
+
+  const deleteServerModal = useDeleteServerModal();
 
   const createChannelModal = useCreateChannelModal();
 
@@ -98,7 +104,7 @@ const ServerHeader = ({ server, role }: Props) => {
         {isAdmin && (
           <DropdownMenuItem
             className="px-3 py-2 text-rose-500 text-sm cursor-pointer"
-            onClick={() => {}}
+            onClick={() => deleteServerModal.onOpen({ server })}
           >
             Delete Server
             <Trash className="h-4 w-4 ml-auto" />
@@ -108,7 +114,7 @@ const ServerHeader = ({ server, role }: Props) => {
         {!isAdmin && (
           <DropdownMenuItem
             className="px-3 py-2 text-rose-500 text-sm cursor-pointer"
-            onClick={() => {}}
+            onClick={() => leaveServerModal.onOpen({ server })}
           >
             Leave Server
             <LogOut className="h-4 w-4 ml-auto" />
