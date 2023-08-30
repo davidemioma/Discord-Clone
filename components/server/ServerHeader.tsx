@@ -4,6 +4,7 @@ import React from "react";
 import { ServerProps } from "@/types";
 import { Role } from "@prisma/client";
 import useInviteModal from "@/hooks/use-invite-modal";
+import useMembersModal from "@/hooks/use-members-modal";
 import useEditServerModal from "@/hooks/use-edit-server-modal";
 import {
   ChevronDown,
@@ -33,6 +34,8 @@ const ServerHeader = ({ server, role }: Props) => {
   const isModerator = isAdmin || role === Role.MODERATOR;
 
   const inviteModal = useInviteModal();
+
+  const membersModal = useMembersModal();
 
   const editServerModal = useEditServerModal();
 
@@ -70,7 +73,7 @@ const ServerHeader = ({ server, role }: Props) => {
         {isAdmin && (
           <DropdownMenuItem
             className="px-3 py-2 text-sm cursor-pointer"
-            onClick={() => {}}
+            onClick={() => membersModal.onOpen({ server })}
           >
             Manage Members
             <Users className="h-4 w-4 ml-auto" />
