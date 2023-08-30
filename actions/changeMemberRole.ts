@@ -80,6 +80,6 @@ export const changeMemberRole = async ({ serverId, memberId, role }: Props) => {
 
     return server;
   } catch (err: any) {
-    throw new Error(`Failed to create server: ${err.message}`);
+    throw new Error(`Failed to change role: ${err.message}`);
   }
 };

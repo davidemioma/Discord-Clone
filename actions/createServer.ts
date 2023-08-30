@@ -38,7 +38,7 @@ export const createServer = async ({ name, imgUrl }: Props) => {
           create: [
             {
               profileId: profile.id,
-              name: "General",
+              name: "general",
             },
           ],
         },

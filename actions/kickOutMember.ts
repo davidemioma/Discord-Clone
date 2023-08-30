@@ -69,6 +69,6 @@ export const kickOutMember = async ({ serverId, memberId }: Props) => {
 
     return server;
   } catch (err: any) {
-    throw new Error(`Failed to create server: ${err.message}`);
+    throw new Error(`Failed to kick out member: ${err.message}`);
   }
 };

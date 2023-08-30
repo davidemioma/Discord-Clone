@@ -6,6 +6,7 @@ import { Role } from "@prisma/client";
 import useInviteModal from "@/hooks/use-invite-modal";
 import useMembersModal from "@/hooks/use-members-modal";
 import useEditServerModal from "@/hooks/use-edit-server-modal";
+import useCreateChannelModal from "@/hooks/use-create-channel-modal";
 import {
   ChevronDown,
   LogOut,
@@ -38,6 +39,8 @@ const ServerHeader = ({ server, role }: Props) => {
   const membersModal = useMembersModal();
 
   const editServerModal = useEditServerModal();
+
+  const createChannelModal = useCreateChannelModal();
 
   return (
     <DropdownMenu>
@@ -83,7 +86,7 @@ const ServerHeader = ({ server, role }: Props) => {
         {isModerator && (
           <DropdownMenuItem
             className="px-3 py-2 text-sm cursor-pointer"
-            onClick={() => {}}
+            onClick={() => createChannelModal.onOpen({ server })}
           >
             Create Channel
             <PlusCircle className="h-4 w-4 ml-auto" />
