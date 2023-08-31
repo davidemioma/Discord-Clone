@@ -8,7 +8,8 @@ import { ChannelType } from "@prisma/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useCreateChannelModal from "@/hooks/use-create-channel-modal";
+import { editChannel } from "@/actions/editChannel";
+import useEditChannelModal from "@/hooks/use-edit-channel-modal";
 import { channelData, channelSchema } from "@/lib/validators/channel";
 import {
   Dialog,
@@ -32,65 +33,64 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createChannel } from "@/actions/createChannel";
 
-const CreateChannelModal = () => {
+const EditChannelModal = () => {
   const router = useRouter();
 
-  const channelModal = useCreateChannelModal();
+  const editChannelModal = useEditChannelModal();
 
-  const { server } = channelModal.data;
+  const { channel, server } = editChannelModal.data;
 
   const form = useForm({
     resolver: zodResolver(channelSchema),
     defaultValues: {
       name: "",
-      type: channelModal.channelType || ChannelType.TEXT,
+      type: channel?.type || ChannelType.TEXT,
     },
   });
 
   useEffect(() => {
-    if (channelModal.channelType) {
-      form.setValue("type", channelModal.channelType);
-    } else {
-      form.setValue("type", ChannelType.TEXT);
+    if (channel) {
+      form.setValue("name", channel.name);
+      form.setValue("type", channel.type);
     }
-  }, [channelModal.channelType, form]);
+  }, [form, channel]);
 
   const isLoading = form.formState.isSubmitting;
 
   const handleClose = () => {
     form.reset();
 
-    channelModal.onClose();
+    editChannelModal.onClose();
   };
 
   const onSubmit = async (values: channelData) => {
     try {
-      await createChannel({
+      await editChannel({
+        channelId: channel?.id!,
         serverId: server?.id!,
         name: values.name,
         type: values.type,
       });
 
-      toast.success("Channel Created.");
+      toast.success("Channel Updated.");
 
       form.reset();
 
       router.refresh();
 
-      channelModal.onClose();
+      editChannelModal.onClose();
     } catch (err) {
       toast.error("Something went wrong!");
     }
   };
 
   return (
-    <Dialog open={channelModal.isOpen} onOpenChange={handleClose}>
+    <Dialog open={editChannelModal.isOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-xl sm:text-2xl text-center font-bold">
-            Create Channel
+            Edit Channel
           </DialogTitle>
         </DialogHeader>
 
@@ -158,7 +158,7 @@ const CreateChannelModal = () => {
 
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button variant="primary" disabled={isLoading}>
-                Create
+                Save
               </Button>
             </DialogFooter>
           </form>
@@ -168,4 +168,4 @@ const CreateChannelModal = () => {
   );
 };
 
-export default CreateChannelModal;
+export default EditChannelModal;

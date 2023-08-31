@@ -19,7 +19,7 @@ const Sidebar = async () => {
   const servers = await getServers(profile.id);
 
   return (
-    <div className="w-full h-full flex flex-col gap-4 py-3 dark:bg-[#1e1f22] text-primary">
+    <div className="w-full h-full flex flex-col gap-4 py-3 bg-[#e3e5e8] dark:bg-[#1e1f22] text-primary">
       <SidebarAction />
 
       <Separator className="h-[2px] w-10 mx-auto bg-zinc-300 dark:bg-zinc-700 rounded-md" />
