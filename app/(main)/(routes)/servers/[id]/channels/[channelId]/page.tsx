@@ -5,5 +5,9 @@ export default function ChannelPage({
 }) {
   const { channelId } = params;
 
-  return <div>ChannelPage {channelId}</div>;
+  return (
+    <div className="h-full bg-white dark:bg-[#313338] flex flex-col">
+      ChannelPage {channelId}
+    </div>
+  );
 }
