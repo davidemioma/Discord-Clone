@@ -1,13 +1,39 @@
-export default function ChannelPage({
+import { redirect } from "next/navigation";
+import { getMember } from "@/actions/getMember";
+import { redirectToSignIn } from "@clerk/nextjs";
+import ChatHeader from "@/components/chat/ChatHeader";
+import { getChannelById } from "@/actions/getChannelById";
+import { getAccountProfile } from "@/actions/getAccountProfile";
+
+export default async function ChannelPage({
   params,
 }: {
-  params: { channelId: string };
+  params: { id: string; channelId: string };
 }) {
-  const { channelId } = params;
+  const { id, channelId } = params;
+
+  const profile = await getAccountProfile();
+
+  if (!profile) {
+    return redirectToSignIn();
+  }
+
+  const channel = await getChannelById(channelId);
+
+  //This is to check if current user is a member on the server
+  const member = await getMember({ serverId: id, profileId: profile.id });
+
+  if (!channel || !member) {
+    redirect("/");
+  }
 
   return (
     <div className="h-full bg-white dark:bg-[#313338] flex flex-col">
-      ChannelPage {channelId}
+      <ChatHeader
+        name={channel.name}
+        type="channel"
+        serverId={channel.serverId}
+      />
     </div>
   );
 }
