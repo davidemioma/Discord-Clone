@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import ModalProvider from "@/components/providers/modal-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import ToasterProvider from "@/components/providers/toaster-provider";
+import { SocketProvider } from "@/components/providers/socket-proviser";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -25,16 +26,18 @@ export default function RootLayout({
         <body className={cn(font.className, "bg-white dark:bg-[#313338]")}>
           <ToasterProvider />
 
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            storageKey="discord-team"
-          >
-            <ModalProvider />
+          <SocketProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              storageKey="discord-team"
+            >
+              <ModalProvider />
 
-            {children}
-          </ThemeProvider>
+              {children}
+            </ThemeProvider>
+          </SocketProvider>
         </body>
       </html>
     </ClerkProvider>

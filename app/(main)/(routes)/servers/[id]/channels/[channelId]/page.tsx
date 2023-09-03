@@ -21,10 +21,13 @@ export default async function ChannelPage({
   const channel = await getChannelById(channelId);
 
   //This is to check if current user is a member on the server
-  const member = await getMember({ serverId: id, profileId: profile.id });
+  const currentMember = await getMember({
+    serverId: id,
+    profileId: profile.id,
+  });
 
-  if (!channel || !member) {
-    redirect("/");
+  if (!channel || !currentMember) {
+    return redirect("/");
   }
 
   return (

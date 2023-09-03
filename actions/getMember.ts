@@ -18,6 +18,9 @@ export const getMember = async ({ serverId, profileId }: Props) => {
         serverId,
         profileId,
       },
+      include: {
+        profile: true,
+      },
     });
 
     return member;
