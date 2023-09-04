@@ -10,14 +10,14 @@ const SocketIndicator = () => {
   if (!isConnected) {
     return (
       <Badge className="bg-yellow-600 text-white border-none" variant="outline">
-        Fallback: Polling every 1s.
+        Fallback<span className="hidden sm:inline">: Polling every 1s.</span>
       </Badge>
     );
   }
 
   return (
     <Badge className="bg-emerald-600 text-white border-none" variant="outline">
-      Live: Real time updates.
+      Live<span className="hidden sm:inline">: Real time updates.</span>
     </Badge>
   );
 };
