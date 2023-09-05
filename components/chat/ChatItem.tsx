@@ -80,6 +80,8 @@ const ChatItem = ({
 
   const canDelete = !message.deleted && (isAdmin || isModerator || isOwner);
 
+  const show = canDelete || canEdit;
+
   const deleteMessageModal = useDeleteMessageModal();
 
   const onMemberClick = () => {
@@ -223,30 +225,32 @@ const ChatItem = ({
         </div>
       </div>
 
-      <div className="hidden group-hover:flex items-center gap-2 absolute p-1 -top-2 right-5 bg-white dark:bg-zinc-800 border rounded-sm">
-        {canEdit && (
-          <ActionTooltip label={isEditing ? "Cancel" : "Edit"}>
-            <Edit
-              className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
-              onClick={() => setIsEditing((prev) => !prev)}
-            />
-          </ActionTooltip>
-        )}
+      {show && (
+        <div className="hidden group-hover:flex items-center gap-2 absolute p-1 -top-2 right-5 bg-white dark:bg-zinc-800 border rounded-sm">
+          {canEdit && (
+            <ActionTooltip label={isEditing ? "Cancel" : "Edit"}>
+              <Edit
+                className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
+                onClick={() => setIsEditing((prev) => !prev)}
+              />
+            </ActionTooltip>
+          )}
 
-        {canDelete && (
-          <ActionTooltip label="Delete">
-            <Trash
-              className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
-              onClick={() =>
-                deleteMessageModal.onOpen({
-                  apiUrl: `${socketUrl}/${message.id}`,
-                  query: socketQuery,
-                })
-              }
-            />
-          </ActionTooltip>
-        )}
-      </div>
+          {canDelete && (
+            <ActionTooltip label="Delete">
+              <Trash
+                className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
+                onClick={() =>
+                  deleteMessageModal.onOpen({
+                    apiUrl: `${socketUrl}/${message.id}`,
+                    query: socketQuery,
+                  })
+                }
+              />
+            </ActionTooltip>
+          )}
+        </div>
+      )}
     </div>
   );
 };

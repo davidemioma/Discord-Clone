@@ -9,6 +9,7 @@ import ChatWelcome from "./ChatWelcome";
 import { DATE_FORMAT } from "@/lib/utils";
 import { Loader2, ServerCrash } from "lucide-react";
 import { useChatQuery } from "@/hooks/use-chat-query";
+import { useChatSocket } from "@/hooks/use chat-socket";
 
 interface Props {
   name: string;
@@ -41,6 +42,8 @@ const ChatMessages = ({
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({ queryKey, apiUrl, paramKey, paramValue });
+
+  useChatSocket({ addKey, updateKey, queryKey });
 
   if (status === "loading") {
     return (

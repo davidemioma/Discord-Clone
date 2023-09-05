@@ -13,7 +13,7 @@ interface Props {
 
 const ChatHeader = ({ name, type, serverId, imgUrl }: Props) => {
   return (
-    <div className="h-12 flex items-center px-3 font-semibold border-b border-neutral-200 dark:border-neutral-800">
+    <div className="h-12 flex-shrink-0 flex items-center px-3 font-semibold border-b border-neutral-200 dark:border-neutral-800">
       <MobileToggle serverId={serverId} />
 
       {type === "channel" && (
