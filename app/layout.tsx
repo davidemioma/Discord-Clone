@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import QueryProvider from "@/components/providers/query-provider";
 import ModalProvider from "@/components/providers/modal-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import ToasterProvider from "@/components/providers/toaster-provider";
@@ -27,16 +28,18 @@ export default function RootLayout({
           <ToasterProvider />
 
           <SocketProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              storageKey="discord-team"
-            >
-              <ModalProvider />
+            <QueryProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                storageKey="discord-team"
+              >
+                <ModalProvider />
 
-              {children}
-            </ThemeProvider>
+                {children}
+              </ThemeProvider>
+            </QueryProvider>
           </SocketProvider>
         </body>
       </html>

@@ -12,6 +12,10 @@ export type ServerProps = Server & {
   members: MemberProps[];
 };
 
+export type MessageType = Message & {
+  member: MemberProps;
+};
+
 export type NextApiResponseServerIo = NextApiResponse & {
   socket: Socket & {
     server: NetServer & {

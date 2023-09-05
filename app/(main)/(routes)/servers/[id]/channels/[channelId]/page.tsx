@@ -5,6 +5,7 @@ import ChatHeader from "@/components/chat/ChatHeader";
 import { getChannelById } from "@/actions/getChannelById";
 import { getAccountProfile } from "@/actions/getAccountProfile";
 import ChatInput from "@/components/chat/ChatInput";
+import ChatMessages from "@/components/chat/ChatMessages";
 
 export default async function ChannelPage({
   params,
@@ -39,7 +40,22 @@ export default async function ChannelPage({
         serverId={channel.serverId}
       />
 
-      <div className="flex-1"></div>
+      <div className="flex-1">
+        <ChatMessages
+          name={channel.name}
+          type="channel"
+          member={currentMember}
+          chatId={channel.id}
+          apiUrl="/api/messages"
+          socketUrl="/api/socket/messages"
+          socketQuery={{
+            channelId: channel.id,
+            serverId: channel.serverId,
+          }}
+          paramKey="channelId"
+          paramValue={channel.id}
+        />
+      </div>
 
       <ChatInput
         name={channel.name}
