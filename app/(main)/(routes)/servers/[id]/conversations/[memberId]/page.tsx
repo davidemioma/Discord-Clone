@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
 import { getMember } from "@/actions/getMember";
 import { redirectToSignIn } from "@clerk/nextjs";
+import ChatInput from "@/components/chat/ChatInput";
+import ChatHeader from "@/components/chat/ChatHeader";
+import ChatMessages from "@/components/chat/ChatMessages";
 import { getAccountProfile } from "@/actions/getAccountProfile";
 import { getOrCreateConversation } from "@/actions/conversation";
-import ChatHeader from "@/components/chat/ChatHeader";
 
 export default async function ConversationPage({
   params,
@@ -49,6 +51,31 @@ export default async function ConversationPage({
         type="conversation"
         serverId={id}
         imgUrl={otherMember.profile.imgUrl}
+      />
+
+      <div className="flex-1">
+        <ChatMessages
+          name={otherMember.profile.name}
+          type="conversation"
+          member={currentMember}
+          chatId={conversation.id}
+          apiUrl="/api/direct-messages"
+          socketUrl="/api/socket/direct-messages"
+          socketQuery={{
+            conversationId: conversation.id,
+          }}
+          paramKey="conversationId"
+          paramValue={conversation.id}
+        />
+      </div>
+
+      <ChatInput
+        name={otherMember.profile.name}
+        type="conversation"
+        apiUrl="/api/socket/direct-messages"
+        query={{
+          conversationId: conversation.id,
+        }}
       />
     </div>
   );
