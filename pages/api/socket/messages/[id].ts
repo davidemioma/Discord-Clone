@@ -1,12 +1,12 @@
 import prismadb from "@/lib/prismadb";
 import { Role } from "@prisma/client";
-import { NextApiRequest } from "next";
-import { NextApiResponseServerIo } from "@/types";
+import { pusherServer } from "@/lib/pusher";
+import { NextApiRequest, NextApiResponse } from "next";
 import { getPagesAccountProfile } from "@/lib/getPagesAccountProfile";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponseServerIo
+  res: NextApiResponse
 ) {
   if (req.method !== "PATCH" && req.method !== "DELETE") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -150,7 +150,7 @@ export default async function handler(
 
     const updateKey = `chat:${channelId}:messages:update`;
 
-    res?.socket?.server?.io?.emit(updateKey, message);
+    pusherServer.trigger(channelId, updateKey, message);
 
     return res.status(200).json(message);
   } catch (err) {

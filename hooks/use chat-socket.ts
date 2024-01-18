@@ -1,7 +1,7 @@
 import { useEffect } from "react";
+import { pusherClient } from "@/lib/pusher";
 import { useQueryClient } from "@tanstack/react-query";
 import { Message, Member, Profile } from "@prisma/client";
-import { useSocket } from "@/components/providers/socket-proviser";
 
 type Props = {
   addKey: string;
@@ -16,42 +16,14 @@ type MessageProps = Message & {
 };
 
 export const useChatSocket = ({ addKey, updateKey, queryKey }: Props) => {
-  const { socket } = useSocket();
-
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!socket) {
-      return;
-    }
+    if (!queryKey) return;
 
-    socket.on(updateKey, (message: MessageProps) => {
-      queryClient.setQueryData([queryKey], (oldData: any) => {
-        if (!oldData || !oldData.pages || oldData.pages.length === 0) {
-          return oldData;
-        }
+    pusherClient.subscribe(queryKey);
 
-        const newData = oldData.pages.map((page: any) => {
-          return {
-            ...page,
-            messages: page.messages.map((msg: MessageProps) => {
-              if (msg.id === message.id) {
-                return message;
-              }
-
-              return msg;
-            }),
-          };
-        });
-
-        return {
-          ...oldData,
-          pages: newData,
-        };
-      });
-    });
-
-    socket.on(addKey, (message: MessageProps) => {
+    const newMessageHandler = (message: MessageProps) => {
       queryClient.setQueryData([queryKey], (oldData: any) => {
         if (!oldData || !oldData.pages || oldData.pages.length === 0) {
           return {
@@ -75,11 +47,44 @@ export const useChatSocket = ({ addKey, updateKey, queryKey }: Props) => {
           pages: newData,
         };
       });
-    });
+    };
+
+    const updateMessageHandler = (message: MessageProps) => {
+      queryClient.setQueryData([queryKey], (oldData: any) => {
+        if (!oldData || !oldData.pages || oldData.pages.length === 0) {
+          return oldData;
+        }
+
+        const newData = oldData.pages.map((page: any) => {
+          return {
+            ...page,
+            messages: page.messages.map((msg: MessageProps) => {
+              if (msg.id === message.id) {
+                return message;
+              }
+
+              return msg;
+            }),
+          };
+        });
+
+        return {
+          ...oldData,
+          pages: newData,
+        };
+      });
+    };
+
+    pusherClient.bind(addKey, newMessageHandler);
+
+    pusherClient.bind(updateKey, updateMessageHandler);
 
     return () => {
-      socket.off(addKey);
-      socket.off(updateKey);
+      pusherClient.unsubscribe(queryKey);
+
+      pusherClient.unbind(addKey, newMessageHandler);
+
+      pusherClient.unbind(updateKey, updateMessageHandler);
     };
-  }, [socket, queryClient, queryKey, updateKey, addKey]);
+  }, [queryClient, queryKey, updateKey, addKey]);
 };

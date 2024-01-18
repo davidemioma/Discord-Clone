@@ -7,7 +7,7 @@ import QueryProvider from "@/components/providers/query-provider";
 import ModalProvider from "@/components/providers/modal-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import ToasterProvider from "@/components/providers/toaster-provider";
-import { SocketProvider } from "@/components/providers/socket-proviser";
+import { PusherProvider } from "@/components/providers/pusher-provider";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -27,7 +27,7 @@ export default function RootLayout({
         <body className={cn(font.className, "bg-white dark:bg-[#313338]")}>
           <ToasterProvider />
 
-          <SocketProvider>
+          <PusherProvider>
             <QueryProvider>
               <ThemeProvider
                 attribute="class"
@@ -40,7 +40,7 @@ export default function RootLayout({
                 {children}
               </ThemeProvider>
             </QueryProvider>
-          </SocketProvider>
+          </PusherProvider>
         </body>
       </html>
     </ClerkProvider>
