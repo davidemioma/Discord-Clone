@@ -1,6 +1,6 @@
 import qs from "query-string";
+import { pusherClient } from "@/lib/pusher";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { usePusher } from "@/components/providers/pusher-provider";
 
 interface Props {
   queryKey: string;
@@ -15,8 +15,6 @@ export const useChatQuery = ({
   paramKey,
   paramValue,
 }: Props) => {
-  const pusher = usePusher();
-
   const fetchMessages = async ({ pageParam = undefined }) => {
     const url = qs.stringifyUrl(
       {
@@ -39,7 +37,8 @@ export const useChatQuery = ({
       queryKey: [queryKey],
       queryFn: fetchMessages,
       getNextPageParam: (lastPage: any) => lastPage?.nextCursor,
-      refetchInterval: pusher.status === "connected" ? false : 1000,
+      refetchInterval:
+        pusherClient.connection.state === "connected" ? false : 1000,
     });
 
   return {
