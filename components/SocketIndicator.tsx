@@ -2,12 +2,12 @@
 
 import React from "react";
 import { Badge } from "./ui/badge";
-import { useSocket } from "./providers/socket-proviser";
+import { usePusher } from "./providers/pusher-provider";
 
 const SocketIndicator = () => {
-  const { isConnected } = useSocket();
+  const pusher = usePusher();
 
-  if (!isConnected) {
+  if (pusher.status !== "connected") {
     return (
       <Badge className="bg-yellow-600 text-white border-none" variant="outline">
         Fallback<span className="hidden sm:inline">: Polling every 1s.</span>
