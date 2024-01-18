@@ -7,6 +7,7 @@ type Props = {
   addKey: string;
   updateKey: string;
   queryKey: string;
+  pusherKey: string;
 };
 
 type MessageProps = Message & {
@@ -15,13 +16,18 @@ type MessageProps = Message & {
   };
 };
 
-export const useChatSocket = ({ addKey, updateKey, queryKey }: Props) => {
+export const useChatSocket = ({
+  addKey,
+  updateKey,
+  queryKey,
+  pusherKey,
+}: Props) => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!queryKey) return;
+    if (!pusherKey) return;
 
-    pusherClient.subscribe(queryKey);
+    pusherClient.subscribe(pusherKey);
 
     const newMessageHandler = (message: MessageProps) => {
       queryClient.setQueryData([queryKey], (oldData: any) => {
@@ -80,7 +86,7 @@ export const useChatSocket = ({ addKey, updateKey, queryKey }: Props) => {
     pusherClient.bind(updateKey, updateMessageHandler);
 
     return () => {
-      pusherClient.unsubscribe(queryKey);
+      pusherClient.unsubscribe(pusherKey);
 
       pusherClient.unbind(addKey, newMessageHandler);
 

@@ -22,22 +22,24 @@ export const PusherProvider = ({ children }: { children: React.ReactNode }) => {
   const [status, setStatus] = useState<ConnectionStatus>("disconnected");
 
   useEffect(() => {
-    pusherClient.connection.bind("connected", () => setStatus("connected"));
+    if (typeof window !== "undefined") {
+      const pusher = pusherClient;
 
-    pusherClient.connection.bind("disconnected", () =>
-      setStatus("disconnected")
-    );
+      pusher.connection.bind("connected", () => setStatus("connected"));
 
-    pusherClient.connection.bind("connecting", () => setStatus("connecting"));
+      pusher.connection.bind("disconnected", () => setStatus("disconnected"));
 
-    pusherClient.connection.bind("unavailable", () => setStatus("unavailable"));
+      pusher.connection.bind("connecting", () => setStatus("connecting"));
 
-    pusherClient.connection.bind("error", () => setStatus("error"));
+      pusher.connection.bind("unavailable", () => setStatus("unavailable"));
 
-    return () => {
-      pusherClient.disconnect();
-    };
-  }, []);
+      pusher.connection.bind("error", () => setStatus("error"));
+
+      return () => {
+        pusher.disconnect();
+      };
+    }
+  }, [pusherClient]);
 
   return (
     <PusherContext.Provider value={{ status }}>
