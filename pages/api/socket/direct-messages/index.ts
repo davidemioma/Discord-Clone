@@ -91,7 +91,7 @@ export default async function handler(
 
     const channelKey = `chat:${conversationId}:messages`;
 
-    pusherServer.trigger(conversationId, channelKey, message);
+    await pusherServer.trigger(conversationId, channelKey, message);
 
     return res.status(200).json(message);
   } catch (err) {

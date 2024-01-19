@@ -148,7 +148,7 @@ export default async function handler(
 
     const updateKey = `chat:${conversationId}:messages:update`;
 
-    pusherServer.trigger(conversationId, updateKey, message);
+    await pusherServer.trigger(conversationId, updateKey, message);
 
     return res.status(200).json(message);
   } catch (err) {
