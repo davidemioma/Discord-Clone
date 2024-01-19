@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useRef, ElementRef, useMemo } from "react";
+import React, { Fragment, useRef, ElementRef } from "react";
 import { format } from "date-fns";
 import ChatItem from "./ChatItem";
 import { MessageType } from "@/types";
@@ -45,12 +45,10 @@ const ChatMessages = ({
 
   const bottomRef = useRef<ElementRef<"div">>(null);
 
-  const pusherKey = useMemo(() => chatId, [chatId]);
-
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({ queryKey, apiUrl, paramKey, paramValue });
 
-  useChatSocket({ addKey, updateKey, queryKey, pusherKey });
+  useChatSocket({ addKey, updateKey, queryKey, pusherKey: chatId });
 
   useChatScroll({
     chatRef,
