@@ -5,6 +5,7 @@ import axios from "axios";
 import qs from "query-string";
 import { Button } from "../ui/button";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import useDeleteMessageModal from "@/hooks/use-delete-messsage-modal";
 import {
   Dialog,
@@ -16,6 +17,8 @@ import {
 } from "@/components/ui/dialog";
 
 const DeleteMessageModal = () => {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const deleteMessageModal = useDeleteMessageModal();
@@ -32,6 +35,8 @@ const DeleteMessageModal = () => {
       });
 
       await axios.delete(url);
+
+      router.refresh();
 
       deleteMessageModal.onClose();
     } catch (err: any) {
